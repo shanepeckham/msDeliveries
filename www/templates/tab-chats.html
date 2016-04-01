@@ -1,0 +1,18 @@
+<ion-view view-title="Deliveries">
+  <ion-content>
+         <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
+      </ion-refresher>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="delivery in deliveries" type="item-text-wrap" href="#/tab/chats/{{delivery.id}}">
+        <img ng-src="{{delivery.face}}">
+        <h2>{{delivery.Name}}</h2>
+        <p>{{delivery.Product}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="remove(delivery)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

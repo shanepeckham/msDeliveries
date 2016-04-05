@@ -1,8 +1,122 @@
-    angular.module('starter.controllers', [])
+    angular.module('starter.controllers', ['ionic'])
+    
+    .controller('DashCtrl', function ($scope, $state, $ionicModal) {
+    
+    var success = false;
+    var pushRegistration = null;
 
-    .controller('DashCtrl', function ($scope) {
+    $scope.signIn = function (user) {
+   //     console.log('Sign-In', user);
+        // Login to the service
+                var client = new WindowsAzure.MobileServiceClient(
+                       "http://msdeliveries.azurewebsites.net",
+                       "vuHmsFpccMcOYShlbqGBbbMLeYOzzx94"
 
-    })
+        );
+        
+      
+        
+        client.login('aad')
+            .then(function () {
+            
+             // Added to register for push notifications.
+         
+              registerForPushNotifications();
+       //        console.log("out of register");    
+              $state.go('tab.deliveries');
+
+            }, handleError);
+        
+  
+    };
+        
+        function handleError()
+        {
+            
+            console.log("In error");
+        }
+        
+        // Register for Push Notifications.
+        // Requires that phonegap-plugin-push be installed.
+
+        function registerForPushNotifications() {
+            
+            try
+                {
+            
+                  //    console.log("In register");
+                      pushRegistration = PushNotification.init({
+                        android: {
+                            senderID: 'msdeliveries-1272'
+                        },
+                        ios: {
+                            alert: 'true',
+                            badge: 'true',
+                            sound: 'true'
+                        },
+                        wns: {
+
+                        }
+                    });
+
+                 //       console.log("Still In register");
+
+                    pushRegistration.on('registration', function (data) {
+                        client.push.register('gcm', data.registrationId);
+                    });
+
+                 //       console.log("In register2");
+
+                    pushRegistration.on('notification', function (data, d2) {
+                        alert('Push Received: ' + data.message);
+                    });
+
+                   //     console.log("In register3");
+
+                    pushRegistration.on('error', handleError);
+                }
+            catch(e)
+                {
+                    throw(e.message);
+                }
+  
+        }
+
+//    $scope.registerUser = function (u) {
+//
+//        var client = new WindowsAzure.MobileServiceClient(
+//                       "https://teststesft.azure-mobile.net/",
+//                       "vuHmsFpccMcOYShlbqGBbbMLeYOzzx94"
+//
+//        );
+//        console.log("Called client");
+//
+//        try {
+//            client.invokeApi('modaa/signup', {
+//                method: 'POST',
+//                body: { username: u.email, firstname: u.firstName, lastname: u.lastName, password: 'anything' }
+//            }).done(function (response) {
+//                var signupResult = response.result;
+//                console.log("Signed up " + signupResult.toString());
+//            }, function (error) {
+//                var xhr = error.request;
+//                console.log('Error - status code: ' + xhr.status + '; body: ' + xhr.responseText);
+//            });
+//
+//            // navigator.notification.alert(signupResult);
+//        }
+//        catch (e) {
+//            console.log(e.message);
+//        }
+//
+//
+//    };
+
+})
+
+//    .controller('DashCtrl', function ($scope) {
+//
+//    })
 
     .controller('ChatsCtrl', function ($scope, Deliveries, $http) { // was D
 
@@ -42,7 +156,7 @@
                         "id": deliveries.data[i].rowKey,
                         "Name": deliveries.data[i].name,
                         "Product": deliveries.data[i].product,
-                        "face": 'http://mscoffee.azurewebsites.net/Images/' + imgProd + '.jpg'
+                        "face": 'https://mscoffee.azurewebsites.net/Images/' + imgProd + '.jpg'
                     });
                 }
 
@@ -93,7 +207,7 @@
                             "id": deliveries[i].rowKey,
                             "Name": deliveries[i].name,
                             "Product": deliveries[i].product,
-                            "face": 'http://mscoffee.azurewebsites.net/Images/' + imgProd + '.jpg'
+                            "face": 'https://mscoffee.azurewebsites.net/Images/' + imgProd + '.jpg'
                         });
                     }
 
@@ -157,7 +271,7 @@
                             "location": deliveries[i].location,
                             "mobile": deliveries[i].mobile,
                             "product": deliveries[i].product,
-                            "face": 'http://mscoffee.azurewebsites.net/Images/' + imgProd + '.jpg'
+                            "face": 'https://mscoffee.azurewebsites.net/Images/' + imgProd + '.jpg'
                         });
                     }
 

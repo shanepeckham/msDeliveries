@@ -27,6 +27,7 @@ angular.module('starter.services', [])
 
     return {
         all: function () {
+            console.log("In all Deliveries");
             return deliveries;
         },
         remove: function (delivery) {

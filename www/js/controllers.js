@@ -4,23 +4,41 @@
     
     var success = false;
     var pushRegistration = null;
+   
 
     $scope.signIn = function (user) {
    //     console.log('Sign-In', user);
         // Login to the service
-                var client = new WindowsAzure.MobileServiceClient(
-                       "http://msdeliveries.azurewebsites.net",
-                       "vuHmsFpccMcOYShlbqGBbbMLeYOzzx94"
-
-        );
         
+        Engagement.startActivity("signIn",{});
+              
+         var client = new WindowsAzure.MobileServiceClient(
+                       "https://msdeliveries.azurewebsites.net");
       
         
         client.login('aad')
+   //     client.login('google')
             .then(function () {
             
              // Added to register for push notifications.
-         
+            
+                 //let#'s register with the hub
+                    var connectionString = "Endpoint=sb://msdeliveriespush.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=6RAOLaS52izNNX7A/5ktIIP/4kwk+TV4ax9756w2Hdw=",
+                    notificationHubPath = "msdeliveriespush";
+
+                    
+                    
+                var hub = new WindowsAzure.Messaging.NotificationHub(notificationHubPath, connectionString);
+
+                hub.registerApplicationAsync().then(function (result) {
+                    console.log("Registration successful: " + result.registrationId);
+                });
+
+                hub.onPushNotificationReceived = function (msg) {
+                    console.log("Push Notification received: " + msg);
+                };;
+
+            // emd notifichum
               registerForPushNotifications();
        //        console.log("out of register");    
               $state.go('tab.deliveries');
@@ -30,10 +48,10 @@
   
     };
         
-        function handleError()
+        function handleError(message)
         {
             
-            console.log("In error");
+            console.log("In error " + message);
         }
         
         // Register for Push Notifications.
@@ -43,11 +61,20 @@
             
             try
                 {
+                    var pushRegistration = null;
+                    
+                    // start notifihub
+                    
+                    
+                    
+                    
+                        var client = new WindowsAzure.MobileServiceClient(
+                       "https://msdeliveries.azurewebsites.net");
             
                   //    console.log("In register");
                       pushRegistration = PushNotification.init({
                         android: {
-                            senderID: 'msdeliveries-1272'
+                            senderID: '131918742779'
                         },
                         ios: {
                             alert: 'true',
@@ -60,13 +87,21 @@
                     });
 
                  //       console.log("Still In register");
-
+                    
+              
                     pushRegistration.on('registration', function (data) {
+                         console.log("About to register Client");
                         client.push.register('gcm', data.registrationId);
+                            console.log("Client registered " + data.registrationId );
+                        
+                           pushRegistration.on('notification', function (data, d2) {
+                        alert('Push Received: ' + data.message);
+                    });
+                        
                     });
 
                  //       console.log("In register2");
-
+                          console.log("About to switch on push");
                     pushRegistration.on('notification', function (data, d2) {
                         alert('Push Received: ' + data.message);
                     });
@@ -77,8 +112,10 @@
                 }
             catch(e)
                 {
-                    throw(e.message);
+                    handleError(e.message);
                 }
+            
+        
   
         }
 
@@ -123,6 +160,7 @@
         Deliveries.getDeliveries().then(function (deliveries) {
 
             var tempDeliveries = [];
+            Engagement.startActivity("gettingDeliveries",{});
 
           //         console.log(JSON.stringify(deliveries, null, 4));
             if (deliveries.data.length > 0) {
@@ -166,6 +204,8 @@
         });
 
         $scope.doRefresh = function () {
+            
+            Engagement.startActivity("refreshingDeliveries",{});
 
             $http.defaults.headers.get = {
                 'Content-Type': 'application/json',
@@ -212,6 +252,62 @@
                     }
 
                     $scope.deliveries = tempDeliveries
+                 //    registerForPushNotifications();
+                    
+                    //start
+                      try
+                {
+                    var pushRegistration = null;
+                        var client = new WindowsAzure.MobileServiceClient(
+                       "http://msdeliveries.azurewebsites.net");
+            
+                  //    console.log("In register");
+                      pushRegistration = PushNotification.init({
+                        android: {
+                            senderID: '131918742779'
+                        },
+                        ios: {
+                            alert: 'true',
+                            badge: 'true',
+                            sound: 'true'
+                        },
+                        wns: {
+
+                        }
+                    });
+
+                 //       console.log("Still In register");
+
+                    pushRegistration.on('registration', function (data) {
+                         console.log("About to register Client");
+                        client.push.register('gcm', data.registrationId);
+                            console.log("Client registered");
+                    });
+
+                 //       console.log("In register2");
+                          console.log("About to switch on push");
+                    pushRegistration.on('notification', function (data, d2) {
+                        alert('Push Received: ' + data.message);
+                    });
+
+                   //     console.log("In register3");
+
+                    pushRegistration.on('error', handleError);
+                }
+            catch(e)
+                {
+                    handleError(e.message);
+                }
+                    
+                    
+                function handleError(message)
+                    {
+
+                        console.log("In error " + message);
+                    }
+                    
+                    
+                    // End
 
                 }
 
@@ -228,6 +324,8 @@
     .controller('ChatDetailCtrl', function ($scope, $stateParams, Deliveries, $http, $ionicPopup) {
    //     console.log(JSON.stringify(deliveries, null, 4));
         console.log($stateParams.deliveryId + " is");
+        
+        Engagement.startActivity("deliveryDetail",{});
         
           $http.defaults.headers.get = {
                 'Content-Type': 'application/json',
@@ -288,7 +386,7 @@
         
        $scope.pushDeliveryChange = function() {
            
-           
+           Engagement.startActivity("pushDeliveryChange",{});
            
              $http.defaults.headers.post = {
                 'Content-Type': 'application/json',

@@ -4,7 +4,7 @@
 
             var success = false;
             var pushRegistration = null;
-
+            console.log("Version 1.0");
 
             $scope.signIn = function (user) {
            //     console.log('Sign-In', user);
@@ -16,9 +16,9 @@
                                "https://msdeliveries.azurewebsites.net");
 
 
-                client.login('aad')
+                client.login('aad') //SSO
            //     client.login('google')
-                    .then(function () {
+                    .then(function () { //SSO
 
                      // Added to register for push notifications.
 
@@ -26,25 +26,11 @@
                             var connectionString = "Endpoint=sb://msdeliveriespush.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=6RAOLaS52izNNX7A/5ktIIP/4kwk+TV4ax9756w2Hdw=",
                             notificationHubPath = "msdeliveriespush";
 
-
-                        // Here we are registering direct with the hub, need to check if actually needed - don't think so
-                    /*
-                        var hub = new WindowsAzure.Messaging.NotificationHub(notificationHubPath, connectionString);
-
-                        hub.registerApplicationAsync().then(function (result) {
-                            console.log("Registration successful: " + result.registrationId);
-                        });
-
-                        hub.onPushNotificationReceived = function (msg) {
-                            console.log("Push Notification received: " + msg);
-                        };;
-        */
-                    // emd notifichum
                       registerForPushNotifications();
                //        console.log("out of register");    
                       $state.go('tab.deliveries');
 
-                    }, handleError);
+                    }, handleError); //SSO
 
 
             };

@@ -13,7 +13,7 @@
                 Engagement.startActivity("signIn",{});
 
                  var client = new WindowsAzure.MobileServiceClient(
-                               "https://msdeliveries.azurewebsites.net");
+                               "https://[].azurewebsites.net");
 
 
                 client.login('aad') //SSO
@@ -23,7 +23,7 @@
                      // Added to register for push notifications.
 
                          //let#'s register with the hub
-                            var connectionString = "Endpoint=sb://msdeliveriespush.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=6RAOLaS52izNNX7A/5ktIIP/4kwk+TV4ax9756w2Hdw=",
+                            var connectionString = "Endpoint=sb://[].servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=[]",
                             notificationHubPath = "msdeliveriespush";
 
                       registerForPushNotifications();
@@ -53,7 +53,7 @@
                             // Register with Azure mobile app
 
                                 var client = new WindowsAzure.MobileServiceClient(
-                               "https://msdeliveries.azurewebsites.net");
+                               "https://[].azurewebsites.net");
 
                             // Register for Azure Mobile Engagement push
 
@@ -68,7 +68,7 @@
                           //    Register for native PNS push
                               pushRegistration = PushNotification.init({
                                 android: {
-                                    senderID: '131918742779'
+                                    senderID: '[]'
                                 },
                                 ios: {
                                     alert: 'true',
@@ -174,10 +174,10 @@
                     $http.defaults.headers.get = {
                         'Content-Type': 'application/json',
                         'Ocp-Apim-Trace': 'true',
-                        'Ocp-Apim-Subscription-Key': 'f8a3bcc16d0944d89c8bd02ab93bfc99'
+                        'Ocp-Apim-Subscription-Key': ''
                     }
 
-                    $http.get('https://msapim.azure-api.net/msorderhandling.azurewebsites.net/api/deliveries')
+                    $http.get('https://msapim.azure-api.net/[].azurewebsites.net/api/deliveries')
                     .success(function (deliveries) {
 
                         tempDeliveries = [];
@@ -229,7 +229,7 @@
                           //    console.log("In register");
                               pushRegistration = PushNotification.init({
                                 android: {
-                                    senderID: '131918742779'
+                                    senderID: ''
                                 },
                                 ios: {
                                     alert: 'true',
@@ -295,10 +295,10 @@
                   $http.defaults.headers.get = {
                         'Content-Type': 'application/json',
                         'Ocp-Apim-Trace': 'true',
-                        'Ocp-Apim-Subscription-Key': 'f8a3bcc16d0944d89c8bd02ab93bfc99'
+                        'Ocp-Apim-Subscription-Key': ''
                     }
 
-                   $http.get('https://msapim.azure-api.net/msorderhandling.azurewebsites.net/api/deliveries/'+$stateParams.deliveryId)
+                   $http.get('https://msapim.azure-api.net/[].azurewebsites.net/api/deliveries/'+$stateParams.deliveryId)
                     .success(function (deliveries) {
 
                         tempDeliveries = [];
@@ -356,7 +356,7 @@
                      $http.defaults.headers.post = {
                         'Content-Type': 'application/json',
                         'Ocp-Apim-Trace': 'true',
-                        'Ocp-Apim-Subscription-Key': 'f8a3bcc16d0944d89c8bd02ab93bfc99'
+                        'Ocp-Apim-Subscription-Key': ''
                     }
          //           console.log('Push Delivery Change', $scope.pushDelivery.checked + $scope.pushDelivery.id);
 

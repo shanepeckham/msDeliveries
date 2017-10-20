@@ -12,11 +12,11 @@ angular.module('starter.services', [])
             $http.defaults.headers.get = {
                 'Content-Type': 'application/json',
                 'Ocp-Apim-Trace': 'true',
-                'Ocp-Apim-Subscription-Key': 'f8a3bcc16d0944d89c8bd02ab93bfc99'
+                'Ocp-Apim-Subscription-Key': ''
         }
 
 
-            return $http.get('https://msapim.azure-api.net/msorderhandling.azurewebsites.net/api/deliveries').then(function (response) {
+            return $http.get('https://msapim.azure-api.net/[].azurewebsites.net/api/deliveries').then(function (response) {
                 deliveries = response;
 
                 return deliveries;

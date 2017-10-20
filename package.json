@@ -17,7 +17,7 @@
   "cordovaPlugins": [
       {
       "variables": {
-        "SENDER_ID": "131918742779"
+        "SENDER_ID": ""
       },
       "locator": "phonegap-plugin-push"
     }
